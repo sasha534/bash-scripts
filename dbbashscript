@@ -1,0 +1,25 @@
+#!/bin/bash
+echo "START SCRIPT"
+#sudo apt-add-repository ppa:pitti/postgresql
+sudo apt-get update
+sudo sudo apt-get install postgresql postgresql-contrib
+sudo -u postgres psql
+CREATE DATABASE stockdb;
+CREATE DATABASE smidadb;
+CREATE DATABASE cabinetdb;
+CREATE DATABASE deliverydb;
+#-U postgres - psql User, stockdb - name database, stockdb.dump - name DB dump. Change this parameters on yours
+echo "START stockdb.dump"
+CREATE DATABASE stockdb;
+psql -U postgres -d stockdb -f .\stockdb_D02_2019-08-20-000144.dump.gz
+echo "FINISH stockdb.dump"
+echo "START smida.dump"
+CREATE DATABASE smidadb;
+#-U postgres - psql User, smidadb - name database, smida.dump - name DB dump. Change this parameters on yours.
+psql -U postgres -d smidadb -f .\smidadb_D02_2019-08-20-000030.dump.gz
+echo "FINISH stockdb.dump"
+echo "START other DB"
+psql -U postgres -d stockdb -f .\cabinetdb_D02_2019-08-20-000029.dump
+psql -U postgres -d stockdb -f .\deliverydb_D02_2019-08-20-000143.dump.gz
+echo "FINISH import other DB"
+echo "ALL DB imported!)"
